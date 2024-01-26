@@ -1,10 +1,11 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { isEmpty } from 'lodash';
+import { useEffect, useMemo, useState } from 'react';
+import { isEmpty, set } from 'lodash';
 import { FunctionComponent } from 'react';
 import { SearchBar } from '..';
 import { Film } from '@/types/starWarTypes';
+import { getFilms } from '@/utils/api';
 
 interface InputSearchComboboxProps {
   data: Film[];
@@ -16,18 +17,36 @@ const InputSearchCombobox: FunctionComponent<InputSearchComboboxProps> = ({
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState('');
 
-  const filteredValue =
-    value === ''
-      ? data
-      : data.filter((data) => {
-          const searchValue = value.toLowerCase();
-          return (
-            data.title.toLowerCase().includes(searchValue) ||
-            data.episode_id.toString().includes(searchValue) ||
-            data.director.toLowerCase().includes(searchValue) ||
-            data.characters.some((character) => character.toLowerCase().includes(searchValue))
-          );
-        });
+  const [clientData, setClientData] = useState<Film[]>([]);
+
+  useEffect(() => {
+    getFilms()
+      .then((res) => {
+        setClientData(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  const filteredValue = useMemo(() => {
+    if (isEmpty(data)) {
+      return;
+    }
+    if (value === '') {
+      return data;
+    }
+
+    return data.filter((data) => {
+      const searchValue = value.toLowerCase();
+      return (
+        data.title.toLowerCase().includes(searchValue) ||
+        data.episode_id.toString().includes(searchValue) ||
+        data.director.toLowerCase().includes(searchValue) ||
+        data.characters.some((character) => character.toLowerCase().includes(searchValue))
+      );
+    });
+  }, [value, data]);
 
   return (
     <div className='flex flex-col relative'>
