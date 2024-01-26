@@ -1,6 +1,6 @@
-import { Film } from '@/types/starWarTypes';
+import { StarWarsFilmData } from '@/types/starWarTypes';
 
-const getFilms = async (): Promise<Film[]> => {
+const getFilms = async (): Promise<StarWarsFilmData> => {
   try {
     const response = await fetch(`https://swapi.dev/api/films`, {
       method: 'GET',
@@ -13,7 +13,7 @@ const getFilms = async (): Promise<Film[]> => {
       throw new Error('Failed to fetch Star Wars films data');
     }
 
-    const data: Film[] = await response.json();
+    const data: StarWarsFilmData = await response.json();
 
     return data;
   } catch (err) {
