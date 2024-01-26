@@ -18,6 +18,8 @@ const InputSearchCombobox: FunctionComponent<InputSearchComboboxProps> = ({
 
   const [clientData, setClientData] = useState<StarWarsFilmData>(() => data);
 
+  console.log('clientData', clientData);
+
   const filteredValue = useMemo(() => {
     if (isEmpty(clientData.results)) {
       return;
@@ -30,13 +32,14 @@ const InputSearchCombobox: FunctionComponent<InputSearchComboboxProps> = ({
       const searchValue = value.toLowerCase();
       return (
         data.title.toLowerCase().includes(searchValue) ||
+        data.species.some((species) => species.toLowerCase().includes(searchValue)) ||
         data.episode_id.toString().includes(searchValue) ||
         data.director.toLowerCase().includes(searchValue) ||
         data.planets.some((planet) => planet.toLowerCase().includes(searchValue)) ||
         data.characters.some((character) => character.toLowerCase().includes(searchValue))
       );
     });
-  }, [value, data]);
+  }, [clientData, value]);
 
   return (
     <div className='flex flex-col relative'>

@@ -1,4 +1,17 @@
 import { StarWarsFilmData } from '@/types/starWarTypes';
+import getDataFromUrl from './getDataFromUrl';
+
+type StarwarsSubdata = 'species' | 'planets' | 'characters' | 'starships' | 'vehicles';
+
+const handleUrl = (url: StarWarsFilmData, type: StarwarsSubdata) => {
+  const subdataURL = url.results.find((data) => data[type])?.[type] || [];
+
+  return subdataURL;
+};
+
+const getNames = (data: any) => {
+  return data?.map((data: any) => data.name);
+};
 
 const getFilms = async (): Promise<StarWarsFilmData> => {
   try {
@@ -15,7 +28,33 @@ const getFilms = async (): Promise<StarWarsFilmData> => {
 
     const data: StarWarsFilmData = await response.json();
 
-    return data;
+    const speciesURL = handleUrl(data, 'species');
+    const planetsURL = handleUrl(data, 'planets');
+    const starshipsURL = handleUrl(data, 'starships');
+    const charactersURL = handleUrl(data, 'characters');
+    const vehicles = handleUrl(data, 'vehicles');
+
+    const planetsData = await Promise.all(
+      planetsURL?.map(async (url) => await getDataFromUrl(url))
+    );
+
+    const starshipsData = await Promise.all(
+      starshipsURL?.map(async (url) => await getDataFromUrl(url))
+    );
+
+    const charactersData = await Promise.all(
+      charactersURL?.map(async (url) => await getDataFromUrl(url))
+    );
+
+    const vehiclesData = await Promise.all(vehicles?.map(async (url) => await getDataFromUrl(url)));
+
+    return {
+      ...data,
+      results: data.results.map((film) => ({
+        ...film,
+        planets: getNames(planetsData),
+      })),
+    };
   } catch (err) {
     console.error(err);
     throw err;
