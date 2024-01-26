@@ -1,3 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  ::-webkit-scrollbar {
+    @apply h-2 w-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    /* border-radius: 5px; */
+    /* background: #fff; */
+    @apply bg-transparent dark:bg-transparent;
+  }
+
+  .flex-center {
+    @apply flex justify-center items-center;
+  }
+
+  .flex-center-col {
+    @apply flex flex-col justify-center items-center;
+  }
+
+  .flex-center-row {
+    @apply flex flex-row justify-center items-center;
+  }
+}

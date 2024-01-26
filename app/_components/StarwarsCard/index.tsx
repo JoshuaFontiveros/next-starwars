@@ -17,11 +17,11 @@ const StarwarsCard: FunctionComponent = (): ReactElement => {
           Hover over this card to unleash the power of CSS perspective
         </CardItem>
         <CardItem translateZ='100' rotateX={20} rotateZ={-10} className='w-full mt-4'>
-          <img
+          {/* <img
             src='https://images.unsplash.com/photo-1622837130330-4a9d5c5d7d3f?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29uJTIwYmFyfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&w=1000&q=80'
             alt='card'
             className='w-full h-full rounded-xl'
-          />
+          /> */}
         </CardItem>
         <div className='flex justify-between items-center mt-20'>
           <CardItem
