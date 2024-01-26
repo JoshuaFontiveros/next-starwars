@@ -1,31 +1,72 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { isEmpty, set } from 'lodash';
+import { ReactElement, useEffect, useMemo, useState } from 'react';
+import { debounce, isEmpty, set } from 'lodash';
 import { FunctionComponent } from 'react';
 import { SearchBar } from '..';
 import { StarWarsFilmData } from '@/types/starWarTypes';
 import { getFilms } from '@/utils/api';
 
-interface InputSearchComboboxProps {
-  data: StarWarsFilmData;
-}
-
-const InputSearchCombobox: FunctionComponent<InputSearchComboboxProps> = ({
-  data,
-}): React.ReactElement => {
+const InputSearchCombobox: FunctionComponent = (): ReactElement => {
   const [value, setValue] = useState('');
 
-  const [clientData, setClientData] = useState<StarWarsFilmData>(() => data);
+  const [clientData, setClientData] = useState<StarWarsFilmData>([]);
 
-  console.log('clientData', clientData);
+  // const debouncedFetchData = debounce(async (inputValue) => {
+  //   const data = await getFilms(inputValue);
+  //   setClientData(data);
+  // }, 1000);
+
+  useEffect(() => {
+    SWApi.Planets.findBySearch(['Tatooine', 'Alderaan', 'Naboo', 'Bespin', 'Endor']).then(
+      (planets) =>
+        _.map(planets.resources, (planet) => ({
+          text: planet.value.name,
+          value: parseInt(planet.value.population),
+        }))
+    );
+
+    SWApi.Vehicles.find((vehicle) => vehicle.pilots.length > 0)
+      .then((vehicles) => vehicles.populateAll('pilots'))
+      .then((vehicles) => vehicles.populateAll('pilots.homeworld'))
+      .then((vehicles) =>
+        _.filter(vehicles.resources, (vehicle) =>
+          _.every(
+            vehicle.value.pilots,
+            (pilot) => _.get(pilot, 'homeworld.population') !== 'unknown'
+          )
+        )
+      )
+      .then((vehicles) =>
+        _.map(vehicles, (vehicle) => ({
+          name: vehicle.value.name,
+          pilots: _.map(vehicle.value.pilots as SWApi.IPeople[], 'name'),
+          population: _.map(vehicle.value.pilots, (pilot) => ({
+            name: _.get(pilot, 'homeworld.name'),
+            population: _.get(pilot, 'homeworld.population'),
+          })),
+          get populationSum() {
+            return _.sumBy(this.population, (p) => parseInt(p.population));
+          },
+        }))
+      )
+      .then((vehicles) => _.reverse(_.sortBy(vehicles, (vehicle) => vehicle.populationSum)));
+  }, []);
+
+  // useEffect(() => {
+  //   // Call the debounced function when the value changes
+  //   if (value) {
+  //     debouncedFetchData(value);
+  //   }
+  //   //eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [value]);
 
   const filteredValue = useMemo(() => {
     if (isEmpty(clientData.results)) {
       return;
     }
     if (value === '') {
-      return clientData.results;
+      return clientData?.results;
     }
 
     return clientData.results.filter((data) => {
@@ -50,7 +91,6 @@ const InputSearchCombobox: FunctionComponent<InputSearchComboboxProps> = ({
             {isEmpty(filteredValue) ? (
               <span className='text-gray-500'>No results found</span>
             ) : (
-              filteredValue &&
               filteredValue?.map((value) => <span key={value.episode_id}>{value.title}</span>)
             )}
           </div>
