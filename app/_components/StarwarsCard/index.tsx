@@ -1,13 +1,18 @@
-'use client';
 import React, { FunctionComponent, ReactElement } from 'react';
 import { CardBody, CardContainer, CardItem } from '../animated/3DCard';
+import { StarWarsFilm } from '@/types/starWarTypes';
 
-const StarwarsCard: FunctionComponent = (): ReactElement => {
+interface StarwarsCardProps {
+  data: StarWarsFilm;
+}
+const StarwarsCard: FunctionComponent<StarwarsCardProps> = ({ data }): ReactElement => {
+  const { title, episode_id, director, producer, release_date, opening_crawl } = data;
+
   return (
     <CardContainer className='inter-var'>
       <CardBody className='bg-gray-50 relative group/card  dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-auto sm:w-[30rem] h-auto rounded-xl p-6 border  '>
         <CardItem translateZ='50' className='text-xl font-bold text-neutral-600 dark:text-white'>
-          Make things float in air
+          {title}
         </CardItem>
         <CardItem
           as='p'
@@ -17,6 +22,7 @@ const StarwarsCard: FunctionComponent = (): ReactElement => {
           Hover over this card to unleash the power of CSS perspective
         </CardItem>
         <CardItem translateZ='100' rotateX={20} rotateZ={-10} className='w-full mt-4'>
+          aasd
           {/* <img
             src='https://images.unsplash.com/photo-1622837130330-4a9d5c5d7d3f?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29uJTIwYmFyfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&w=1000&q=80'
             alt='card'

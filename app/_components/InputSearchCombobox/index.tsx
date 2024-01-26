@@ -1,76 +1,41 @@
 'use client';
 
-import { ReactElement, useEffect, useMemo, useState } from 'react';
-import { debounce, isEmpty, set } from 'lodash';
+import { LegacyRef, ReactElement, Ref, useEffect, useMemo, useState } from 'react';
+import { isEmpty, set } from 'lodash';
 import { FunctionComponent } from 'react';
 import { SearchBar } from '..';
 import { StarWarsFilmData } from '@/types/starWarTypes';
-import { getFilms } from '@/utils/api';
+import { useDebounce, useClickAway } from '@uidotdev/usehooks';
+import { motion } from 'framer-motion';
 
-const InputSearchCombobox: FunctionComponent = (): ReactElement => {
+interface InputSearchComboboxProps {
+  data: StarWarsFilmData;
+}
+
+const InputSearchCombobox: FunctionComponent<InputSearchComboboxProps> = ({
+  data,
+}): ReactElement => {
   const [value, setValue] = useState('');
-
-  const [clientData, setClientData] = useState<StarWarsFilmData>([]);
-
-  // const debouncedFetchData = debounce(async (inputValue) => {
-  //   const data = await getFilms(inputValue);
-  //   setClientData(data);
-  // }, 1000);
+  const debounceValue = useDebounce(value, 500);
+  const ref = useClickAway(() => {
+    setIsOpen(false);
+  });
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    SWApi.Planets.findBySearch(['Tatooine', 'Alderaan', 'Naboo', 'Bespin', 'Endor']).then(
-      (planets) =>
-        _.map(planets.resources, (planet) => ({
-          text: planet.value.name,
-          value: parseInt(planet.value.population),
-        }))
-    );
-
-    SWApi.Vehicles.find((vehicle) => vehicle.pilots.length > 0)
-      .then((vehicles) => vehicles.populateAll('pilots'))
-      .then((vehicles) => vehicles.populateAll('pilots.homeworld'))
-      .then((vehicles) =>
-        _.filter(vehicles.resources, (vehicle) =>
-          _.every(
-            vehicle.value.pilots,
-            (pilot) => _.get(pilot, 'homeworld.population') !== 'unknown'
-          )
-        )
-      )
-      .then((vehicles) =>
-        _.map(vehicles, (vehicle) => ({
-          name: vehicle.value.name,
-          pilots: _.map(vehicle.value.pilots as SWApi.IPeople[], 'name'),
-          population: _.map(vehicle.value.pilots, (pilot) => ({
-            name: _.get(pilot, 'homeworld.name'),
-            population: _.get(pilot, 'homeworld.population'),
-          })),
-          get populationSum() {
-            return _.sumBy(this.population, (p) => parseInt(p.population));
-          },
-        }))
-      )
-      .then((vehicles) => _.reverse(_.sortBy(vehicles, (vehicle) => vehicle.populationSum)));
-  }, []);
-
-  // useEffect(() => {
-  //   // Call the debounced function when the value changes
-  //   if (value) {
-  //     debouncedFetchData(value);
-  //   }
-  //   //eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [value]);
+    setIsOpen(!!debounceValue);
+  }, [debounceValue]);
 
   const filteredValue = useMemo(() => {
-    if (isEmpty(clientData.results)) {
+    if (isEmpty(data.results)) {
       return;
     }
-    if (value === '') {
-      return clientData?.results;
+    if (debounceValue === '') {
+      return data?.results;
     }
 
-    return clientData.results.filter((data) => {
-      const searchValue = value.toLowerCase();
+    return data.results.filter((data) => {
+      const searchValue = debounceValue.toLowerCase();
       return (
         data.title.toLowerCase().includes(searchValue) ||
         data.species.some((species) => species.toLowerCase().includes(searchValue)) ||
@@ -80,21 +45,52 @@ const InputSearchCombobox: FunctionComponent = (): ReactElement => {
         data.characters.some((character) => character.toLowerCase().includes(searchValue))
       );
     });
-  }, [clientData, value]);
+  }, [data, debounceValue]);
 
   return (
     <div className='flex flex-col relative'>
       <SearchBar inputValue={value} setInputValue={setValue} />
-      {!isEmpty(value) && (
-        <div className='absolute h-52 mt-10 w-full z-[999]'>
-          <div className='absolute bottom-0 shadow-lg border mt-2 rounded-md h-52 flex flex-col py-2 px-4 bg-white w-full'>
-            {isEmpty(filteredValue) ? (
-              <span className='text-gray-500'>No results found</span>
-            ) : (
-              filteredValue?.map((value) => <span key={value.episode_id}>{value.title}</span>)
-            )}
+
+      {isOpen && (
+        <motion.div
+          className='relative'
+          ref={ref as Ref<HTMLDivElement>}
+          initial={{ y: 0, x: 0, scale: 0.5, rotate: 0 }}
+          animate={{
+            y: 300,
+            transition: { delay: 0.2, type: 'spring', stiffness: 100 },
+            scale: 1,
+            rotate: 0,
+          }}
+        >
+          <div className='absolute  w-full z-[999]'>
+            <div
+              className={`absolute bottom-0 shadow-lg border mt-8 rounded-md h-auto flex flex-col gap-2 py-2 px-4 bg-white w-full`}
+            >
+              {isEmpty(filteredValue) ? (
+                <span className='text-gray-500'>No results found</span>
+              ) : (
+                filteredValue?.map((value) => (
+                  <div
+                    key={value.episode_id}
+                    onClick={() => {
+                      setValue('');
+                      setIsOpen((prev) => !prev);
+                    }}
+                    className='hover:bg-gray-500 w-auto cursor-pointer flex gap-2 items-center'
+                  >
+                    <img
+                      src='https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1920px-Image_created_with_a_mobile_phone.png'
+                      className='w-10 h-10'
+                      alt='test'
+                    />
+                    {value.title}
+                  </div>
+                ))
+              )}
+            </div>
           </div>
-        </div>
+        </motion.div>
       )}
     </div>
   );
