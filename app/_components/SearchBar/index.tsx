@@ -4,13 +4,18 @@ import { Search } from 'lucide-react';
 interface SearchBarProps {
   inputValue: string;
   setInputValue: (value: string) => void;
+  ref: (instance: HTMLSpanElement | null) => void;
 }
 const SearchBar: FunctionComponent<SearchBarProps> = ({
   inputValue,
   setInputValue,
+  ref,
 }): ReactElement => {
   return (
-    <span className='flex w-full items-center justify-between rounded-lg border-0 px-2 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'>
+    <span
+      ref={ref}
+      className='flex w-full items-center justify-between rounded-lg border-0 px-2 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+    >
       <input
         type='text'
         value={inputValue}
