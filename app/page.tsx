@@ -5,8 +5,6 @@ import { getFilms } from '@/utils/api';
 import { useRouter } from 'next/navigation';
 
 const Home: NextPage = async () => {
-  const router = useRouter();
-  const films = await getFilms();
   return (
     <div className='flex flex-col w-full'>
       <span>Server side</span>
