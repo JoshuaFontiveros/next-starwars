@@ -43,12 +43,12 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
                 className='hover:bg-gray-500 w-auto cursor-pointer flex gap-2 items-center'
               >
                 <Image
-                  src={value.images}
+                  src={value.imageUrl}
                   width={1000}
                   height={1000}
                   loading='lazy'
                   placeholder='blur'
-                  className='w-24 h-24'
+                  className='w-20 h-20'
                   alt='test'
                   blurDataURL='https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1920px-Image_created_with_a_mobile_phone.png'
                 />

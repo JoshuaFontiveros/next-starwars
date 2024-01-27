@@ -101,6 +101,8 @@ const getStarWarsFilms = async () => {
         vehicles: getNames(vehiclesData),
         imageUrl: getCldImageUrl({
           src: handleCloudinaryUrl(film.episode_id) || '',
+          width: 300,
+          height: 300,
         }),
       })),
     };
