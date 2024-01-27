@@ -14,9 +14,13 @@ export interface StarWarsFilm {
   edited: string;
   url: string;
 }
+
 export interface StarWarsFilmData {
   count: number;
   next: null | string;
   previous: null | string;
   results: StarWarsFilm[];
+}
+export interface DataResponse {
+  data: StarWarsFilmData;
 }

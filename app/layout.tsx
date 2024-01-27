@@ -15,6 +15,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const films = await getFilms();
+
   return (
     <html lang='en'>
       <StarWarsProvider>
