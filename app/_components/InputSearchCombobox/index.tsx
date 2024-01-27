@@ -7,11 +7,11 @@ import SearchBar from './SearchBar';
 import SearchResults from './SearchResults';
 import { useDebounce, useClickAway } from '@uidotdev/usehooks';
 import useStarWars from '@/app/_hooks/useStarWars';
-import { StarWarsFilm, DataResponse } from '@/types/starWarTypes';
+import { StarWarsFilm, DataResponse, StarWarsFilmData } from '@/types/starWarTypes';
 import { getFilms } from '@/utils/api';
 
 interface InputSearchComboboxProps {
-  data: DataResponse;
+  data: StarWarsFilmData;
 }
 
 const InputSearchCombobox: FunctionComponent<InputSearchComboboxProps> = ({
@@ -35,21 +35,21 @@ const InputSearchCombobox: FunctionComponent<InputSearchComboboxProps> = ({
     []
   );
 
-  console.log('data', data);
+  console.log('data', data.results);
 
   useEffect(() => {
     setIsOpen(!!debounceValue);
   }, [debounceValue]);
 
   const filteredValue = useMemo(() => {
-    if (isEmpty(data.data?.results)) {
+    if (isEmpty(data?.results)) {
       return [];
     }
     if (debounceValue === '') {
-      return data.data?.results;
+      return data?.results;
     }
 
-    return data.data.results.filter((data) => {
+    return data?.results.filter((data) => {
       const searchValue = debounceValue.toLowerCase();
 
       if (data) {

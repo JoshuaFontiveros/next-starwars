@@ -1,8 +1,8 @@
-import { DataResponse } from '@/types/starWarTypes';
+import { StarWarsFilmData } from '@/types/starWarTypes';
 
 const API = process.env.NEXT_PUBLIC_API;
 
-const getFilms = async (): Promise<DataResponse> => {
+const getFilms = async (): Promise<StarWarsFilmData> => {
   try {
     const response = await fetch(`${API}/star-wars`, {
       method: 'GET',
@@ -17,7 +17,6 @@ const getFilms = async (): Promise<DataResponse> => {
 
     const data = await response.json();
 
-    console.log('data', data);
     return data;
   } catch (err) {
     console.error(err);
