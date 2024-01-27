@@ -3,11 +3,10 @@
 import { ReactElement, Ref, useEffect, useMemo, useState } from 'react';
 import { isEmpty, set } from 'lodash';
 import { FunctionComponent } from 'react';
-import { SearchBar } from '..';
-import { StarWarsFilm, StarWarsFilmData } from '@/types/starWarTypes';
+import { SearchBar, SearchResults } from '.';
+
 import { useDebounce, useClickAway } from '@uidotdev/usehooks';
 import useStarWars from '@/app/_hooks/useStarWars';
-import SearchResults from './SearchResults';
 
 interface InputSearchComboboxProps {
   data: StarWarsFilmData;
