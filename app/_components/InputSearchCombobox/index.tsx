@@ -86,8 +86,6 @@ const InputSearchCombobox: FunctionComponent = (): ReactElement => {
     [starWarsData, setStarWarsData]
   );
 
-  console.log('data', clientData);
-
   return (
     <div className='flex flex-col relative' ref={divRef as Ref<HTMLDivElement>}>
       <SearchBar
