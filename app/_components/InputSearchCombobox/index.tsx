@@ -1,7 +1,7 @@
 'use client';
 
-import { ReactElement, Ref, useEffect, useMemo, useState } from 'react';
-import { isEmpty, set } from 'lodash';
+import { ReactElement, Ref, memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { debounce, isEmpty, set } from 'lodash';
 import { FunctionComponent } from 'react';
 import SearchBar from './SearchBar';
 import SearchResults from './SearchResults';
@@ -21,9 +21,17 @@ const InputSearchCombobox: FunctionComponent<InputSearchComboboxProps> = ({
   const divRef = useClickAway(() => {
     setIsOpen(false);
   });
-  const { setStarWarsData } = useStarWars();
+  const { starWarsData, setStarWarsData } = useStarWars();
 
+  console.log('starWarsData', starWarsData);
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleSetValue = useCallback(
+    (value: string) => {
+      setValue(value);
+    },
+    [value]
+  );
 
   useEffect(() => {
     setIsOpen(!!debounceValue);
@@ -50,17 +58,28 @@ const InputSearchCombobox: FunctionComponent<InputSearchComboboxProps> = ({
     });
   }, [data, debounceValue]);
 
-  const handleSelect = (value: StarWarsFilm) => {
-    setStarWarsData(value);
+  const handleSelect = useCallback(
+    (value: StarWarsFilm) => {
+      if (starWarsData === value) return;
+      setStarWarsData(value);
 
-    //clear fields
-    setValue('');
-    setIsOpen(false);
-  };
+      //clear fields
+      setValue('');
+      setIsOpen(false);
+    },
+    [starWarsData, setStarWarsData]
+  );
+
+  const PureSearchbar = memo(SearchBar);
 
   return (
     <div className='flex flex-col relative' ref={divRef as Ref<HTMLDivElement>}>
-      <SearchBar inputValue={value} setInputValue={setValue} open={isOpen} setOpen={setIsOpen} />
+      <PureSearchbar
+        inputValue={value}
+        setInputValue={handleSetValue}
+        open={isOpen}
+        setOpen={setIsOpen}
+      />
       {isOpen && <SearchResults filteredValue={filteredValue} handleSelect={handleSelect} />}
     </div>
   );

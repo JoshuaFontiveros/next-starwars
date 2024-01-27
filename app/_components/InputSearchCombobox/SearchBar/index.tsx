@@ -23,7 +23,7 @@ const SearchBar: FunctionComponent<SearchBarProps> = ({
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         className='w-[calc(100%_-_1rem)] border-none focus:outline-none'
-        placeholder='Input message'
+        placeholder='Search...'
       />
       <Search />
     </span>
