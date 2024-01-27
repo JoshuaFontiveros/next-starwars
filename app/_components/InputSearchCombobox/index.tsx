@@ -1,7 +1,7 @@
 'use client';
 
-import { ReactElement, Ref, memo, useCallback, useEffect, useMemo, useState } from 'react';
-import { debounce, isEmpty, set } from 'lodash';
+import { ReactElement, Ref, useCallback, useEffect, useMemo, useState } from 'react';
+import { isEmpty } from 'lodash';
 import { FunctionComponent } from 'react';
 import SearchBar from './SearchBar';
 import SearchResults from './SearchResults';
@@ -10,11 +10,6 @@ import useStarWars from '@/app/_hooks/useStarWars';
 import { StarWarsFilm, StarWarsFilmData } from '@/types/starWarTypes';
 import { getFilms } from '@/utils/api';
 import { toast } from 'sonner';
-import { getCldImageUrl } from 'next-cloudinary';
-
-const url = getCldImageUrl({
-  src: 'bigeedrpqfbmrdidvani',
-});
 
 const InputSearchCombobox: FunctionComponent = (): ReactElement => {
   const [value, setValue] = useState('');
@@ -22,8 +17,6 @@ const InputSearchCombobox: FunctionComponent = (): ReactElement => {
   const divRef = useClickAway(() => {
     setIsOpen(false);
   });
-
-  console.log('url', url);
 
   const { starWarsData, setStarWarsData } = useStarWars();
 
@@ -56,8 +49,6 @@ const InputSearchCombobox: FunctionComponent = (): ReactElement => {
   useEffect(() => {
     setIsOpen(!!debounceValue);
   }, [debounceValue]);
-
-  console.log('data', clientData);
 
   const filteredValue = useMemo(() => {
     if (isEmpty(clientData?.results)) {
