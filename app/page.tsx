@@ -5,12 +5,7 @@ import { getFilms } from '@/utils/api';
 import { useRouter } from 'next/navigation';
 
 const Home: NextPage = async () => {
-  return (
-    <div className='flex flex-col w-full'>
-      <span>Server side</span>
-      <span>Client side</span>
-    </div>
-  );
+  return <></>;
 };
 
 export default Home;
