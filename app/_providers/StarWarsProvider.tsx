@@ -1,11 +1,11 @@
 'use client';
 
-import { StarWarsFilmData } from '@/types/starWarTypes';
+import { StarWarsFilm } from '@/types/starWarTypes';
 import React, { createContext, useState, ReactNode, FunctionComponent, ReactElement } from 'react';
 
 interface StarWarsContextInterface {
-  starWarsData: StarWarsFilmData;
-  setStarWarsData: (data: StarWarsFilmData) => void;
+  starWarsData: StarWarsFilm;
+  setStarWarsData: (data: StarWarsFilm) => void;
 }
 
 export const StarWarsContext = createContext<StarWarsContextInterface | undefined>(undefined);
@@ -17,7 +17,7 @@ interface StarWarsContextProviderProps {
 const StarWarsProvider: FunctionComponent<StarWarsContextProviderProps> = ({
   children,
 }): ReactElement => {
-  const [starWarsData, setStarWarsData] = useState<StarWarsFilmData>({} as StarWarsFilmData);
+  const [starWarsData, setStarWarsData] = useState<StarWarsFilm>({} as StarWarsFilm);
 
   const contextValue: StarWarsContextInterface = {
     starWarsData,
