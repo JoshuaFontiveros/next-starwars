@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { getFilms } from '@/utils/api';
+
 import { InputSearchCombobox } from './_components';
 import StarWarsProvider from './_providers/StarWarsProvider';
 import { Toaster } from 'sonner';
@@ -15,8 +15,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const films = await getFilms();
-
   return (
     <html lang='en'>
       <StarWarsProvider>
