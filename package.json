@@ -13,6 +13,7 @@
     "@radix-ui/react-popover": "^1.0.7",
     "@uidotdev/usehooks": "^2.4.1",
     "class-variance-authority": "^0.7.0",
+    "cloudinary": "^1.41.3",
     "clsx": "^2.1.0",
     "cmdk": "^0.2.0",
     "dotenv": "^16.4.1",

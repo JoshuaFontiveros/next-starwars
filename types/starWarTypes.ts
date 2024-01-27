@@ -2,6 +2,7 @@ export interface StarWarsFilm {
   title: string;
   episode_id: number;
   opening_crawl: string;
+  imageUrl: string;
   director: string;
   producer: string;
   release_date: string;

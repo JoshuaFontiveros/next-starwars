@@ -1,5 +1,7 @@
 import { StarWarsFilm, StarWarsFilmData } from '@/types/starWarTypes';
 import { NextRequest, NextResponse } from 'next/server';
+import { getCldImageUrl } from 'next-cloudinary';
+
 const API = process.env.STAR_WARS_API;
 
 type StarwarsSubdata = 'species' | 'planets' | 'characters' | 'starships' | 'vehicles';
@@ -28,6 +30,23 @@ const handleUrl = (url: StarWarsFilmData, type: StarwarsSubdata) => {
   const subdataURL = url.results.find((data) => data[type])?.[type] || [];
 
   return subdataURL;
+};
+
+const handleCloudinaryUrl = (episode_id: number) => {
+  switch (episode_id) {
+    case 1:
+      return 'of2xix1ynvsdm7rah7y1';
+    case 2:
+      return 'bigeedrpqfbmrdidvani';
+    case 3:
+      return 'nitb99eckaiyvckxjt1f';
+    case 4:
+      return 'ogy8ipagk3pexi3wok3h';
+    case 5:
+      return 'omqlyohf2bgbi6h7ziqe';
+    case 6:
+      return 'f86uf2gblwklfeulibak';
+  }
 };
 
 const getNames = (data: any) => {
@@ -80,6 +99,9 @@ const getStarWarsFilms = async () => {
         starships: getNames(starshipsData),
         planets: getNames(planetsData),
         vehicles: getNames(vehiclesData),
+        imageUrl: getCldImageUrl({
+          src: handleCloudinaryUrl(film.episode_id) || '',
+        }),
       })),
     };
 

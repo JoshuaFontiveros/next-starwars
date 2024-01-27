@@ -43,7 +43,7 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
                 className='hover:bg-gray-500 w-auto cursor-pointer flex gap-2 items-center'
               >
                 <Image
-                  src='https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1920px-Image_created_with_a_mobile_phone.png'
+                  src={value.images}
                   width={1000}
                   height={1000}
                   loading='lazy'

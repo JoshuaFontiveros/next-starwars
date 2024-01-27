@@ -10,6 +10,11 @@ import useStarWars from '@/app/_hooks/useStarWars';
 import { StarWarsFilm, StarWarsFilmData } from '@/types/starWarTypes';
 import { getFilms } from '@/utils/api';
 import { toast } from 'sonner';
+import { getCldImageUrl } from 'next-cloudinary';
+
+const url = getCldImageUrl({
+  src: 'bigeedrpqfbmrdidvani',
+});
 
 const InputSearchCombobox: FunctionComponent = (): ReactElement => {
   const [value, setValue] = useState('');
@@ -17,6 +22,8 @@ const InputSearchCombobox: FunctionComponent = (): ReactElement => {
   const divRef = useClickAway(() => {
     setIsOpen(false);
   });
+
+  console.log('url', url);
 
   const { starWarsData, setStarWarsData } = useStarWars();
 
@@ -49,6 +56,8 @@ const InputSearchCombobox: FunctionComponent = (): ReactElement => {
   useEffect(() => {
     setIsOpen(!!debounceValue);
   }, [debounceValue]);
+
+  console.log('data', clientData);
 
   const filteredValue = useMemo(() => {
     if (isEmpty(clientData?.results)) {
@@ -85,6 +94,8 @@ const InputSearchCombobox: FunctionComponent = (): ReactElement => {
     },
     [starWarsData, setStarWarsData]
   );
+
+  console.log('data', clientData);
 
   return (
     <div className='flex flex-col relative' ref={divRef as Ref<HTMLDivElement>}>
