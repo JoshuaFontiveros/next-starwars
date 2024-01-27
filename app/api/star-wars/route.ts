@@ -99,6 +99,7 @@ const getStarWarsFilms = async () => {
         starships: getNames(starshipsData),
         planets: getNames(planetsData),
         vehicles: getNames(vehiclesData),
+        publicId: handleCloudinaryUrl(film.episode_id) || '',
         imageUrl: getCldImageUrl({
           src: handleCloudinaryUrl(film.episode_id) || '',
           width: 300,

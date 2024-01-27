@@ -1,6 +1,7 @@
 'use client';
 
 import { ReactElement, Ref, useCallback, useEffect, useMemo, useState } from 'react';
+
 import { isEmpty } from 'lodash';
 import { FunctionComponent } from 'react';
 import SearchBar from './SearchBar';
@@ -21,6 +22,7 @@ const InputSearchCombobox: FunctionComponent = (): ReactElement => {
   const { starWarsData, setStarWarsData } = useStarWars();
 
   const [clientData, setClientData] = useState<StarWarsFilmData>({} as StarWarsFilmData);
+  const [loading, setLoading] = useState(false);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -36,12 +38,14 @@ const InputSearchCombobox: FunctionComponent = (): ReactElement => {
     if (!debounceValue) return;
 
     const fetchData = async () => {
+      setLoading(true);
       const data = await getFilms();
       if (data) {
         setClientData(data);
       } else {
         toast.error('Error fetching data');
       }
+      setLoading(false);
     };
     fetchData();
   }, [debounceValue]);
@@ -61,16 +65,18 @@ const InputSearchCombobox: FunctionComponent = (): ReactElement => {
     return clientData?.results.filter((data) => {
       const searchValue = debounceValue.toLowerCase();
 
-      if (data) {
-        return (
-          data.title.toLowerCase().includes(searchValue) ||
-          data.species.some((species) => species?.toLowerCase().includes(searchValue)) ||
-          data.episode_id.toString().includes(searchValue) ||
-          data.director.toLowerCase().includes(searchValue) ||
-          data.planets.some((planet) => planet.toLowerCase().includes(searchValue)) ||
-          data.characters.some((character) => character.toLowerCase().includes(searchValue))
-        );
-      }
+      if (!data) return false;
+
+      return [
+        data.title,
+        data.director,
+        data.episode_id.toString(),
+        ...data.species,
+        ...data.planets,
+        ...data.starships,
+        ...data.vehicles,
+        ...data.characters,
+      ].some((item) => item?.toLowerCase().includes(searchValue));
     });
   }, [clientData, debounceValue]);
 
@@ -94,7 +100,13 @@ const InputSearchCombobox: FunctionComponent = (): ReactElement => {
         open={isOpen}
         setOpen={setIsOpen}
       />
-      {isOpen && <SearchResults filteredValue={filteredValue} handleSelect={handleSelect} />}
+      {isOpen && (
+        <SearchResults
+          filteredValue={filteredValue}
+          handleSelect={handleSelect}
+          loading={loading}
+        />
+      )}
     </div>
   );
 };

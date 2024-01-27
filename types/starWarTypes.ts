@@ -13,6 +13,7 @@ export interface StarWarsFilm {
   species: string[];
   created: string;
   edited: string;
+  publicId: string;
   url: string;
 }
 

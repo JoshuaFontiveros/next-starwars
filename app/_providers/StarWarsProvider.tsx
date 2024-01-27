@@ -11,7 +11,7 @@ import React, {
 } from 'react';
 
 interface StarWarsContextInterface {
-  starWarsData: StarWarsFilm;
+  starWarsData?: StarWarsFilm;
   setStarWarsData: (data: StarWarsFilm) => void;
   activateServerSearch: boolean;
   setActivateServerSearch: (value: boolean) => void;
@@ -26,7 +26,7 @@ interface StarWarsContextProviderProps {
 const StarWarsProvider: FunctionComponent<StarWarsContextProviderProps> = ({
   children,
 }): ReactElement => {
-  const [starWarsData, setStarWarsData] = useState<StarWarsFilm>({} as StarWarsFilm);
+  const [starWarsData, setStarWarsData] = useState<StarWarsFilm>();
   const [activateServerSearch, setActivateServerSearch] = useState(false);
 
   const contextValue: StarWarsContextInterface = {
