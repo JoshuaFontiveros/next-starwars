@@ -8,6 +8,7 @@ import SearchResults from './SearchResults';
 import { useDebounce, useClickAway } from '@uidotdev/usehooks';
 import useStarWars from '@/app/_hooks/useStarWars';
 import { StarWarsFilm, DataResponse } from '@/types/starWarTypes';
+import { getFilms } from '@/utils/api';
 
 interface InputSearchComboboxProps {
   data: DataResponse;
@@ -36,6 +37,15 @@ const InputSearchCombobox: FunctionComponent<InputSearchComboboxProps> = ({
 
   useEffect(() => {
     setIsOpen(!!debounceValue);
+  }, [debounceValue]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const films = await getFilms();
+      console.log(films);
+      return films;
+    };
+    fetchData();
   }, [debounceValue]);
 
   const filteredValue = useMemo(() => {

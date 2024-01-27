@@ -1,6 +1,6 @@
 import { DataResponse } from '@/types/starWarTypes';
 
-const API = process.env.API;
+const API = process.env.NEXT_PUBLIC_API;
 
 const getFilms = async (): Promise<DataResponse> => {
   try {
