@@ -1,13 +1,16 @@
 'use client';
 
-import { ReactElement, Ref, useCallback, useEffect, useMemo, useState } from 'react';
-import { debounce, isEmpty, set } from 'lodash';
+import { ReactElement, Ref, useEffect, useMemo, useState } from 'react';
+import { isEmpty } from 'lodash';
 import { FunctionComponent } from 'react';
 import { SearchBar } from '..';
 import { StarWarsFilmData } from '@/types/starWarTypes';
-import { useDebounce, useClickAway, useMeasure } from '@uidotdev/usehooks';
+import { useDebounce, useClickAway } from '@uidotdev/usehooks';
 import { motion } from 'framer-motion';
 import { cn } from '@/utils/cn';
+import moment from 'moment';
+import Image from 'next/image';
+import useStarWars from '@/app/_hooks/useStarWars';
 
 interface InputSearchComboboxProps {
   data: StarWarsFilmData;
@@ -21,6 +24,7 @@ const InputSearchCombobox: FunctionComponent<InputSearchComboboxProps> = ({
   const divRef = useClickAway(() => {
     setIsOpen(false);
   });
+  const { setStarwarwarsData } = useStarWars();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -30,7 +34,7 @@ const InputSearchCombobox: FunctionComponent<InputSearchComboboxProps> = ({
 
   const filteredValue = useMemo(() => {
     if (isEmpty(data.results)) {
-      return;
+      return [];
     }
     if (debounceValue === '') {
       return data?.results;
@@ -49,18 +53,9 @@ const InputSearchCombobox: FunctionComponent<InputSearchComboboxProps> = ({
     });
   }, [data, debounceValue]);
 
-  const handleOpen = useCallback(() => {
-    debounceValue && setIsOpen(true);
-  }, [debounceValue]);
-
-  const props = value === debounceValue && {
-    onClick: handleOpen,
-  };
-
   return (
     <div className='flex flex-col relative' ref={divRef as Ref<HTMLDivElement>}>
       <SearchBar inputValue={value} setInputValue={setValue} open={isOpen} setOpen={setIsOpen} />
-
       {isOpen && (
         <motion.div
           className='relative'
@@ -90,12 +85,25 @@ const InputSearchCombobox: FunctionComponent<InputSearchComboboxProps> = ({
                   }}
                   className='hover:bg-gray-500 w-auto cursor-pointer flex gap-2 items-center'
                 >
-                  {/* <img
+                  <Image
                     src='https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1920px-Image_created_with_a_mobile_phone.png'
-                    className='w-10 h-10'
+                    width={1000}
+                    height={1000}
+                    loading='lazy'
+                    placeholder='blur'
+                    className='w-24 h-24'
                     alt='test'
-                  /> */}
-                  {value.title}
+                    blurDataURL='https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1920px-Image_created_with_a_mobile_phone.png'
+                  />
+                  <div className='flex flex-col gap-2'>
+                    <div className='flex gap-2'>
+                      <span className='font-semibold'>{value.title}</span>
+                      <span className='font-light'>
+                        ({moment(value.release_date).format('LL')})
+                      </span>
+                    </div>
+                    <span>Director: {value.director}</span>
+                  </div>
                 </div>
               ))
             )}
