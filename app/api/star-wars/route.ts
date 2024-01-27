@@ -1,6 +1,6 @@
 import { StarWarsFilm, StarWarsFilmData } from '@/types/starWarTypes';
 import { NextRequest, NextResponse } from 'next/server';
-const API = process.env.STARWARS_API;
+const API = process.env.STAR_WARS_API;
 
 type StarwarsSubdata = 'species' | 'planets' | 'characters' | 'starships' | 'vehicles';
 

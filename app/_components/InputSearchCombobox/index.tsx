@@ -35,25 +35,18 @@ const InputSearchCombobox: FunctionComponent<InputSearchComboboxProps> = ({
     []
   );
 
+  console.log('data', data);
+
   useEffect(() => {
     setIsOpen(!!debounceValue);
   }, [debounceValue]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const films = await getFilms();
-      console.log(films);
-      return films;
-    };
-    fetchData();
-  }, [debounceValue]);
-
   const filteredValue = useMemo(() => {
-    if (isEmpty(data.data.results)) {
+    if (isEmpty(data.data?.results)) {
       return [];
     }
     if (debounceValue === '') {
-      return data?.data.results;
+      return data.data?.results;
     }
 
     return data.data.results.filter((data) => {

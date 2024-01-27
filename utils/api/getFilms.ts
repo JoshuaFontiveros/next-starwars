@@ -17,7 +17,8 @@ const getFilms = async (): Promise<DataResponse> => {
 
     const data = await response.json();
 
-    return JSON.parse(data) as DataResponse;
+    console.log('data', data);
+    return data;
   } catch (err) {
     console.error(err);
     throw err;
