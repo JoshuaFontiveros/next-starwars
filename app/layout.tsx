@@ -3,6 +3,7 @@ import './globals.css';
 import { getFilms } from '@/utils/api';
 import { InputSearchCombobox } from './_components';
 import StarWarsProvider from './_providers/StarWarsProvider';
+import { Toaster } from 'sonner';
 
 export const metadata: Metadata = {
   title: 'Star Wars',
@@ -21,9 +22,12 @@ export default async function RootLayout({
       <StarWarsProvider>
         <body>
           <header className='p-2'>
-            <InputSearchCombobox data={films} />
+            <InputSearchCombobox />
           </header>
-          <main className='w-full h-full p-2'>{children}</main>
+          <main className='w-full h-full p-2'>
+            {children}
+            <Toaster richColors />
+          </main>
         </body>
       </StarWarsProvider>
     </html>

@@ -13,6 +13,8 @@ import React, {
 interface StarWarsContextInterface {
   starWarsData: StarWarsFilm;
   setStarWarsData: (data: StarWarsFilm) => void;
+  activateServerSearch: boolean;
+  setActivateServerSearch: (value: boolean) => void;
 }
 
 export const StarWarsContext = createContext<StarWarsContextInterface | undefined>(undefined);
@@ -25,8 +27,11 @@ const StarWarsProvider: FunctionComponent<StarWarsContextProviderProps> = ({
   children,
 }): ReactElement => {
   const [starWarsData, setStarWarsData] = useState<StarWarsFilm>({} as StarWarsFilm);
+  const [activateServerSearch, setActivateServerSearch] = useState(false);
 
   const contextValue: StarWarsContextInterface = {
+    activateServerSearch,
+    setActivateServerSearch,
     starWarsData,
     setStarWarsData: useCallback(
       (data: StarWarsFilm) => {

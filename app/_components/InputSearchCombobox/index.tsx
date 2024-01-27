@@ -7,16 +7,11 @@ import SearchBar from './SearchBar';
 import SearchResults from './SearchResults';
 import { useDebounce, useClickAway } from '@uidotdev/usehooks';
 import useStarWars from '@/app/_hooks/useStarWars';
-import { StarWarsFilm, DataResponse, StarWarsFilmData } from '@/types/starWarTypes';
+import { StarWarsFilm, StarWarsFilmData } from '@/types/starWarTypes';
 import { getFilms } from '@/utils/api';
+import { toast } from 'sonner';
 
-interface InputSearchComboboxProps {
-  data: StarWarsFilmData;
-}
-
-const InputSearchCombobox: FunctionComponent<InputSearchComboboxProps> = ({
-  data,
-}): ReactElement => {
+const InputSearchCombobox: FunctionComponent = (): ReactElement => {
   const [value, setValue] = useState('');
   const debounceValue = useDebounce(value, 500);
   const divRef = useClickAway(() => {
@@ -24,6 +19,8 @@ const InputSearchCombobox: FunctionComponent<InputSearchComboboxProps> = ({
   });
 
   const { starWarsData, setStarWarsData } = useStarWars();
+
+  const [clientData, setClientData] = useState<StarWarsFilmData>({} as StarWarsFilmData);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -35,21 +32,33 @@ const InputSearchCombobox: FunctionComponent<InputSearchComboboxProps> = ({
     []
   );
 
-  console.log('data', data.results);
+  useEffect(() => {
+    if (!debounceValue) return;
+
+    const fetchData = async () => {
+      const data = await getFilms();
+      if (data) {
+        setClientData(data);
+      } else {
+        toast.error('Error fetching data');
+      }
+    };
+    fetchData();
+  }, [debounceValue]);
 
   useEffect(() => {
     setIsOpen(!!debounceValue);
   }, [debounceValue]);
 
   const filteredValue = useMemo(() => {
-    if (isEmpty(data?.results)) {
+    if (isEmpty(clientData?.results)) {
       return [];
     }
     if (debounceValue === '') {
-      return data?.results;
+      return clientData?.results;
     }
 
-    return data?.results.filter((data) => {
+    return clientData?.results.filter((data) => {
       const searchValue = debounceValue.toLowerCase();
 
       if (data) {
@@ -63,7 +72,7 @@ const InputSearchCombobox: FunctionComponent<InputSearchComboboxProps> = ({
         );
       }
     });
-  }, [data, debounceValue]);
+  }, [clientData, debounceValue]);
 
   const handleSelect = useCallback(
     (value: StarWarsFilm) => {
