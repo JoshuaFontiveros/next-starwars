@@ -8,6 +8,9 @@ const getFilms = async (): Promise<StarWarsFilmData> => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Methods': '*',
+        'Access-Control-Allow-Origin': '*',
       },
     });
 
