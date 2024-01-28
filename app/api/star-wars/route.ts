@@ -61,6 +61,9 @@ const getStarWarsFilms = async () => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Methods': 'GET',
+        'Access-Control-Allow-Origin': '*',
       },
     });
 
