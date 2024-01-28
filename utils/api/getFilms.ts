@@ -12,7 +12,7 @@ const getFilms = async (): Promise<StarWarsFilmData> => {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch Star Wars films data');
+      throw new Error('Failed to fetch Star Wars films data. Please try again later.');
     }
 
     const data = await response.json();

@@ -47,7 +47,7 @@ const InputSearchCombobox: FunctionComponent = (): ReactElement => {
       }
       setLoading(false);
     };
-    fetchData();
+    fetchData().catch((err) => toast.error(err.message));
   }, [debounceValue]);
 
   useEffect(() => {
