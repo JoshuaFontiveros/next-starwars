@@ -6,7 +6,27 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env.local and .env.production file
+
+`API`
+
+`NEXT_PUBLIC_API`
+
+`STAR_WARS_API`
+
+`NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`
+
+`NEXT_PUBLIC_CLOUDINARY_PRESET_NAME`
+
+then do npm install:
+
+```bash
+npm install
+```
+
+then run the development server:
 
 ```bash
 npm run dev
