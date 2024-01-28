@@ -60,10 +60,10 @@ const getStarWarsFilms = async () => {
     const response = await fetch(`${API}/films`, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
         'Access-Control-Allow-Headers': '*',
-        'Access-Control-Allow-Methods': 'GET',
+        'Access-Control-Allow-Methods': '*',
         'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
       },
     });
 
