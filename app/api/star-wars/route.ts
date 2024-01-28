@@ -1,7 +1,7 @@
 import { StarWarsFilm, StarWarsFilmData } from '@/types/starWarTypes';
 import { NextRequest, NextResponse } from 'next/server';
 import { getCldImageUrl } from 'next-cloudinary';
-
+import Cors from 'micro-cors'; // Import micro-cors
 const API = process.env.STAR_WARS_API;
 
 type StarwarsSubdata = 'species' | 'planets' | 'characters' | 'starships' | 'vehicles';
@@ -53,6 +53,11 @@ const getNames = (data: any) => {
   return data?.map((data: any) => data.name);
 };
 
+const cors = Cors({
+  allowMethods: ['GET'],
+  origin: '*',
+});
+
 const getStarWarsFilms = async () => {
   if (API === undefined) return;
   console.log('API URL:', API); // Add this line for debugging
@@ -64,6 +69,7 @@ const getStarWarsFilms = async () => {
         'Access-Control-Allow-Methods': '*',
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
+        ...cors,
       },
     });
 
