@@ -6,12 +6,21 @@ const API = process.env.STAR_WARS_API;
 
 type StarwarsSubdata = 'species' | 'planets' | 'characters' | 'starships' | 'vehicles';
 
+const cors = Cors({
+  allowMethods: ['GET'],
+  origin: '*',
+});
+
 const getDataFromUrl = async (url: string): Promise<any> => {
   try {
     const response = await fetch(url, {
       method: 'GET',
       headers: {
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Methods': '*',
+        'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
+        ...cors,
       },
     });
 
@@ -52,11 +61,6 @@ const handleCloudinaryUrl = (episode_id: number) => {
 const getNames = (data: any) => {
   return data?.map((data: any) => data.name);
 };
-
-const cors = Cors({
-  allowMethods: ['GET'],
-  origin: '*',
-});
 
 const getStarWarsFilms = async () => {
   if (API === undefined) return;
